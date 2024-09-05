@@ -23,7 +23,7 @@
 
 <body>
     <section class="vh-100 bg-image" style="  height:100%">
-        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="mask d-flex align-items-center h-auto gradient-custom-3 pb-5">
             <div class="container h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
@@ -68,7 +68,7 @@
                                     <span>
                                         <%= blogs[i].description %>
                                             <h6 class="flex justify-content-end">
-                                                <small>
+                                                <small style="color: rgba(8, 130, 22, 0.5);">
                                                     <%= blogs[i].createdAt.toLocaleDateString() %>
                                                 </small>
                                             </h6>

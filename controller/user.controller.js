@@ -13,11 +13,17 @@ exports.showRegister = async (req, res) => {
 
 exports.registerUser = async (req, res) => {
     try {
-        let user = await User.findOne({email:req.body.email, isDelete: false });
+        const { name, email, password, password2 } = req.body;
+        let user = await User.findOne({ email: req.body.email, isDelete: false });
         if (user) {
             return res.json({ message: 'User already exist...' })
         }
-
+        else if(!firstname || !email || !password || !password2){
+            return res.json({ message: 'Please Fill in all fields'})
+        }
+        else if (password != password2) {
+            return res.jaon('error_msg', 'Passwords do not match');
+        }
         let hashPassword = await bcrypt.hash(req.body.password, 10)
 
         user = await User.create({ ...req.body, password: hashPassword })
@@ -44,14 +50,14 @@ exports.showLogin = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
-        let user = await User.findOne({email:req.body.email, isDelete:false });
+        let user = await User.findOne({ email: req.body.email, isDelete: false });
         if (!user) {
             return res.redirect("/user/login");
             // console.log("user not found");
         }
         let comparePassword = await bcrypt.compare(req.body.password, user.password);
         if (!comparePassword) {
-            return res.redirect("/user/login"); 
+            return res.redirect("/user/login");
             // console.log("passsowrd not match");
         }
         let token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
@@ -66,13 +72,13 @@ exports.loginUser = async (req, res) => {
     }
 }
 
-exports.logout = async(req,res) => {
-       try{
+exports.logout = async (req, res) => {
+    try {
         res.clearCookie('jwt')
         res.redirect('/login')
-       }
-        catch (err) {
+    }
+    catch (err) {
         console.log(err);
-        res.status(500).json({message:'Server Error' })
+        res.status(500).json({ message: 'Server Error' })
     }
 }

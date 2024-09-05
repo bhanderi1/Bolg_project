@@ -6,8 +6,7 @@ exports.verifyToken = async(req,res,next)=>{
         let authorization = req.cookies.auth_token;
 
         if(!authorization)
-            return res.json({message:'not authorization'})
-
+            req.flash({message:'not authorization'})
         let token = authorization.split(" ")[1];
 
         let {userId} = await jwt.verify(token, process.env.JWT_SECRET);
